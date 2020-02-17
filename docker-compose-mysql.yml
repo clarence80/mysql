@@ -1,0 +1,23 @@
+version: "3"
+services:
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    hostname: ${HOSTNAME}
+    ports:
+      - "3306:3306"
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - LD_PRELOAD=/opt/lib/libtcmalloc_minimal.so
+    volumes:
+      - "./mysql/lib:/var/lib/mysql"
+      - "./mysql/log:/var/log/mysql"
+      - "./mysql/my.cnf:/etc/mysql/conf.d/custom.cnf"
+      - "/usr/lib64/libtcmalloc_minimal.so:/opt/lib/libtcmalloc_minimal.so"
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
